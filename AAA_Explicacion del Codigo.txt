@@ -1,0 +1,66 @@
+==================================================
+EXPLICACIÓN DE COMPONENTES Y FLUJO DE REACT HOOK FORM
+==================================================
+
+Este archivo detalla la función de cada uno de los componentes analizados (Formulario, ListaTarea, ItemTarea) y su interacción en una aplicación de To-Do List utilizando la librería React Hook Form.
+
+==================================================
+1. COMPONENTE: Formulario.jsx (El Controlador del Estado)
+==================================================
+
+FUNCIÓN PRINCIPAL:
+Gestiona el estado global de las tareas (el array `tareas`) y maneja la lógica de validación y envío de la nueva tarea utilizando React Hook Form.
+
+HOOKS CENTRALES:
+- useForm(): Inicializa el formulario. Desestructura:
+    - register: Conecta el input HTML con RHF.
+    - handleSubmit: Intercepta el evento onSubmit y ejecuta la validación.
+    - reset: Limpia el formulario después del envío exitoso.
+    - formState: { errors }: Almacena los mensajes de error de validación.
+- useState([]): Almacena la lista de tareas en un array llamado `tareas`.
+
+LÓGICA CLAVE: posteriorValidacion(data)
+- Es la función que se ejecuta si el formulario es válido.
+- Su tarea es actualizar el estado:
+    - setTareas([...tareas, data.tarea]); // Crea un nuevo array con las tareas viejas y la nueva.
+    - reset(); // Limpia el campo de entrada.
+
+CONEXIÓN VISUAL:
+- Pasa el array de estado al componente hijo: <ListaTarea tareas={tareas} />
+
+==================================================
+2. COMPONENTE: ListaTarea.jsx (El Contenedor de la Lista)
+==================================================
+
+FUNCIÓN PRINCIPAL:
+Recibe el array completo de tareas del componente padre (Formulario) y lo mapea para renderizar un componente individual por cada elemento.
+
+LÓGICA CLAVE:
+- Recibe: La prop `tareas` (ej: ['Comprar pan', 'Estudiar React']).
+- Itera: Utiliza el método `.map()` de JavaScript para recorrer el array.
+- Renderiza Hijos: Por cada elemento, renderiza:
+    - <ItemTarea key={index} tarea={tarea} />
+- La prop `key` es crucial para que React pueda optimizar la renderización y seguimiento de los elementos de la lista.
+
+==================================================
+3. COMPONENTE: ItemTarea.jsx (El Elemento Individual)
+==================================================
+
+FUNCIÓN PRINCIPAL:
+Renderiza la estructura y contenido de una única tarea y sus controles asociados (como el botón de eliminar).
+
+LÓGICA CLAVE:
+- Recibe: La prop `tarea` (un string individual, ej: 'Comprar pan').
+- Muestra el Contenido: Utiliza {tarea} dentro de ListGroup.Item para mostrar el texto dinámico.
+- Botón: Contiene el botón de acción (❌) donde en el futuro se implementará la lógica para eliminar esta tarea específica del array global.
+
+==================================================
+FLUJO DE DATOS (DEL FORMULARIO A LA PANTALLA)
+==================================================
+
+1. ENVÍO: Usuario presiona Submit.
+2. VALIDACIÓN: React Hook Form valida el campo 'tarea'.
+3. ESTADO: Formulario.jsx llama a setTareas() creando un nuevo array.
+4. RENDERIZADO: React detecta el cambio en 'tareas' y re-ejecuta Formulario.
+5. DESCENSO: Formulario pasa el array actualizado a ListaTarea.
+6. MAPEO: ListaTarea itera y genera un nuevo ItemTarea por cada elemento del array.
