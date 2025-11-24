@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import ListaTarea from "./ListaTarea";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Formulario = () => {
   const {
@@ -12,13 +12,35 @@ const Formulario = () => {
     formState: { errors },
   } = useForm();
 
-  const [tareas, setTareas] = useState([]);
+  /* Funcion para guardar tareas P1 */
+  const tareasLocalstorage = JSON.parse(localStorage.getItem('tareasKey')) || []; 
+
+  const [tareas, setTareas] = useState(tareasLocalstorage);
 
   const posteriorValidacion = (data) => {
     setTareas([...tareas, data.tarea]);
 
     reset();
   };
+
+  /* Funcion para guardar tareas P2 */
+  useEffect(() =>{
+    localStorage.setItem('tareasKey', JSON.stringify(tareas))
+    
+  }, [tareas])
+
+  /* Funcion para borrar tareas */
+
+  const borrarTarea = (nombreTarea) =>{
+
+    const tareasFiltradas = tareas.filter((itemtarea) => itemtarea !== nombreTarea);
+
+    setTareas(tareasFiltradas)
+
+  }
+
+
+
 
   return (
     <div className="container">
@@ -46,7 +68,7 @@ const Formulario = () => {
 
         <Form.Text className="text-danger">{errors.tarea?.message}</Form.Text>
       </Form>
-      <ListaTarea tareas={tareas}></ListaTarea>
+      <ListaTarea tareas={tareas} borrarTarea={borrarTarea}></ListaTarea>
     </div>
   );
 };

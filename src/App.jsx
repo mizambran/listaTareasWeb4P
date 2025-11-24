@@ -1,8 +1,10 @@
 import './App.css'
-import Footer from './components/shared/Footer'
-import Menu from './components/shared/Menu'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import Menu from './components/shared/Menu'
 import Formulario from './components/views/Formulario'
+import Footer from './components/shared/Footer'
+
+
 function App() {
  
   return (
@@ -10,6 +12,7 @@ function App() {
     <Menu />
     <Formulario />
     <Footer />
+    
     </>
   )
 }
